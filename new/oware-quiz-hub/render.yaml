@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: quiz-hub
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        value: localhost
+      - key: DB_USER
+        value: root
+      - key: DB_PASS
+        value: ""
+      - key: DB_NAME
+        value: quiz_db 
