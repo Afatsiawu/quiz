@@ -9,7 +9,7 @@ services:
       npm run build
     startCommand: |
       cd new/oware-quiz-hub
-      npm run start
+      npx serve dist -l $PORT
     envVars:
       - key: NODE_ENV
         value: production
