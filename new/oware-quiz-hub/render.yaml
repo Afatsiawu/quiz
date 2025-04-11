@@ -3,8 +3,13 @@ services:
     name: quiz-hub
     env: node
     rootDir: new/oware-quiz-hub
-    buildCommand: npm install && npm run build
-    startCommand: npm run start
+    buildCommand: |
+      cd new/oware-quiz-hub
+      npm install
+      npm run build
+    startCommand: |
+      cd new/oware-quiz-hub
+      npm run start
     envVars:
       - key: NODE_ENV
         value: production
@@ -17,4 +22,6 @@ services:
       - key: DB_NAME
         value: quiz_db
       - key: PORT
-        value: 10000 
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0 
