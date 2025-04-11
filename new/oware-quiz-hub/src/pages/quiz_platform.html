@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oware Quiz Hub - Knowledge Hub</title>
+    <link rel="stylesheet" href="../styles/quiz_platform.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <div class="platform-container">
+        <header class="main-header">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo-text">Oware Quiz Hub</div>
+            </div>
+            <div class="header-center">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for quizzes, topics, or users...">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <button class="action-button notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="action-button messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">1</span>
+                    </button>
+                </div>
+                <div class="user-menu">
+                    <button class="user-menu-button">
+                        <div class="avatar">
+                            <span id="avatar-initials">VV</span>
+                        </div>
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="#" class="dropdown-item" onclick="showSection('profile')">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showSection('settings')">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="../../index.html" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <aside class="sidebar" id="sidebar">
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li class="nav-item active" data-section="dashboard">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-section="quizzes">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-book-open"></i>
+                                <span>My Quizzes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-section="create">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Create Quiz</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-section="enter-code">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-keyboard"></i>
+                                <span>Enter Code</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-section="leaderboard">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-trophy"></i>
+                                <span>Leaderboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-section="profile">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="sidebar-footer">
+                        <div class="role-badge" id="user-role">Student</div>
+                    </div>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section">
+                    <div class="section-header">
+                        <h1>Dashboard</h1>
+                        <p>Welcome to your personal dashboard. View your progress and explore available quizzes.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Quizzes Taken</h3>
+                                <p class="stat-number" id="quizzes-taken">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Average Score</h3>
+                                <p class="stat-number" id="avg-score">0%</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Points</h3>
+                                <p class="stat-number" id="total-points">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Quizzes Created</h3>
+                                <p class="stat-number" id="quizzes-created">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-sections">
+                        <div class="recent-quizzes">
+                            <div class="section-header-small">
+                                <h2>Recent Quizzes</h2>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="quiz-cards">
+                                <div class="empty-state">
+                                    <img src="/public/images/empty-quiz.svg" alt="No quizzes" class="empty-icon">
+                                    <p>You haven't taken any quizzes yet.</p>
+                                    <button class="btn-primary" onclick="showSection('enter-code')">Join a Quiz</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="popular-courses">
+                            <div class="section-header-small">
+                                <h2>Popular Courses</h2>
+                                <a href="#" class="view-all">Explore</a>
+                            </div>
+                            <div class="course-cards">
+                                <!--  Course -->
+                                <div class="course-card">
+                                    <div class="course-image" style="background-color: #4A90E2;">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                    <div class="course-content">
+                                        <h3>Venture Capital Basics</h3>
+                                        <p>Learn the fundamentals of venture capital and startup funding</p>
+                                        <div class="course-info">
+                                            <span><i class="fas fa-clock"></i> 10 Modules</span>
+                                            <span><i class="fas fa-user-friends"></i> 1,230 Students</span>
+                                        </div>
+                                        <button class="btn-outline">View Course</button>
+                                    </div>
+                                </div>
+
+                                <!-- Entrepreneurship Course -->
+                                <div class="course-card">
+                                    <div class="course-image" style="background-color: #28A745;">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div class="course-content">
+                                        <h3>Startup Entrepreneurship</h3>
+                                        <p>Master the essential skills needed to launch a successful startup</p>
+                                        <div class="course-info">
+                                            <span><i class="fas fa-clock"></i> 8 Modules</span>
+                                            <span><i class="fas fa-user-friends"></i> 956 Students</span>
+                                        </div>
+                                        <button class="btn-outline">View Course</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile" class="content-section" style="display:none;">
+                    <div class="section-header">
+                        <h1>Profile</h1>
+                        <p>Manage your personal information and view your statistics.</p>
+                    </div>
+
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <span class="avatar-placeholder" id="profile-avatar-initials">VV</span>
+                            </div>
+                            <div class="profile-info">
+                                <h2 id="profile-name">Name</h2>
+                                <p id="profile-email">Email</p>
+                                <button id="edit-profile-btn" class="btn-primary">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <label>Username:</label>
+                                <p id="profile-username">Username</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Department:</label>
+                                <p id="profile-department">Department</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Role:</label>
+                                <p id="profile-role">Student</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Join Date:</label>
+                                <p id="profile-join-date">Date</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-stats">
+                            <div class="stat-box">
+                                <span class="stat-number" id="profile-quizzes-taken">0</span>
+                                <span class="stat-label">Quizzes Taken</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-number" id="profile-avg-score">0%</span>
+                                <span class="stat-label">Average Score</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-number" id="profile-total-points">0</span>
+                                <span class="stat-label">Total Points</span>
+                            </div>
+                        </div>
+
+                        <!-- Edit Profile Form (hidden by default) -->
+                        <div id="edit-profile-form" class="edit-profile-form" style="display: none;">
+                            <h3>Edit Profile</h3>
+                            <form id="profile-form" onsubmit="return updateProfile(event)">
+                                <div class="form-group">
+                                    <label for="edit-name">Name</label>
+                                    <input type="text" id="edit-name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-email">Email</label>
+                                    <input type="email" id="edit-email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-username">Username</label>
+                                    <input type="text" id="edit-username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-department">Department</label>
+                                    <select id="edit-department" name="department" required>
+                                        <option value="Business Administration">Business Administration</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Software Engineering">Software Engineering</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Save Changes</button>
+                                    <button type="button" class="btn-secondary" onclick="toggleEditForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Quiz Section -->
+                <section id="create" class="content-section" style="display:none;">
+                    <div class="section-header">
+                        <h1>Create Quiz</h1>
+                        <p>Design your own quiz by adding multiple-choice and theory questions.</p>
+                    </div>
+
+                    <div class="create-quiz-container">
+                        <div class="quiz-metadata">
+                            <div class="form-group">
+                                <label for="quiz-title">Quiz Title</label>
+                                <input type="text" id="quiz-title" placeholder="Enter a title for your quiz">
+                            </div>
+                            <div class="form-group">
+                                <label for="quiz-description">Description</label>
+                                <textarea id="quiz-description" placeholder="Enter a brief description of your quiz"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="quiz-time">Time Limit (minutes)</label>
+                                <input type="number" id="quiz-time" min="1" max="120" value="10">
+                            </div>
+                        </div>
+
+                        <div class="question-types">
+                            <div class="question-type-card">
+                                <h3>Multiple Choice</h3>
+                                <p>Questions with predefined options</p>
+                                <div class="input-group">
+                                    <label for="num-mc-questions">Number of Questions:</label>
+                                    <input type="number" id="num-mc-questions" min="0" max="20" value="0">
+                                </div>
+                            </div>
+                            <div class="question-type-card">
+                                <h3>Theory Questions</h3>
+                                <p>Open-ended questions for written answers</p>
+                                <div class="input-group">
+                                    <label for="num-theory-questions">Number of Questions:</label>
+                                    <input type="number" id="num-theory-questions" min="0" max="10" value="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="generate-questions-btn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Generate Question Fields
+                        </button>
+
+                        <div id="questions-container"></div>
+
+                        <div id="quiz-actions" style="display: none;">
+                            <button id="save-quiz-btn" class="btn-primary">
+                                <i class="fas fa-save"></i> Save Quiz
+                            </button>
+                        </div>
+
+                        <div id="quiz-code-container" style="display: none;">
+                            <h3>Quiz Created Successfully!</h3>
+                            <p>Share this code with your students to allow them to take the quiz:</p>
+                            <div class="quiz-code">
+                                <span id="quiz-code">XXXXXX</span>
+                                <button id="copy-code-btn" class="btn-icon" title="Copy to clipboard">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enter Code Section -->
+                <section id="enter-code" class="content-section" style="display:none;">
+                    <div class="section-header">
+                        <h1>Enter Quiz Code</h1>
+                        <p>Join a quiz by entering the code provided by your instructor.</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-input-group">
+                            <input type="text" id="quiz-code-input" maxlength="6" placeholder="Enter 6-digit code">
+                            <button id="join-quiz-btn" class="btn-primary">
+                                <span>Join Quiz</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="code-status" class="code-status"></div>
+
+                        <div class="recent-codes">
+                            <h3>Recent Codes</h3>
+                            <div class="code-list" id="recent-codes-list">
+                                <div class="empty-state">
+                                    <p>No recent codes. Enter a code to join a quiz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Leaderboard Section -->
+                <section id="leaderboard" class="content-section" style="display:none;">
+                    <div class="section-header">
+                        <h1>Leaderboard</h1>
+                        <p>See how you compare with other users based on quiz performance.</p>
+                    </div>
+
+                    <div class="leaderboard-container">
+                        <div class="leaderboard-filters">
+                            <div class="form-group">
+                                <label for="leaderboard-filter">Filter By</label>
+                                <select id="leaderboard-filter">
+                                    <option value="all-time">All Time</option>
+                                    <option value="this-month">This Month</option>
+                                    <option value="this-week">This Week</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="leaderboard-table-container">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>User</th>
+                                        <th>Quizzes</th>
+                                        <th>Avg. Score</th>
+                                        <th>Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Leaderboard entries will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/quiz_platform.js"></script>
+</body>
+</html>
